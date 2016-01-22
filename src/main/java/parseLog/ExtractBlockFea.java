@@ -114,8 +114,8 @@ public class ExtractBlockFea {
     private void matchEachFile(String filepath) throws IOException {
         System.out.println("extract file:"+filepath);
         try {
-//            String[] patharr = filepath.split("\\\\");
-            String[] patharr = filepath.split("/");
+            String[] patharr = filepath.split("\\\\");
+//            String[] patharr = filepath.split("/");
             String appid = patharr[patharr.length-1];
             //如果已经保存了，跳过
             DBInstance blockdb = new DBInstance("blockfea");

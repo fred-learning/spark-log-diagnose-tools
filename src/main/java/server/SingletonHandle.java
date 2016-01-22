@@ -9,6 +9,7 @@ import db.DBInstance;
 import db.metadata.*;
 import models.Kmeans;
 import models.PCA;
+import models.Zeus;
 import parseLog.ExtractBlockFea;
 import parseLog.ExtractTaskFea;
 import parseLog.MatchLogSchema;
@@ -32,10 +33,10 @@ public class SingletonHandle {
         return handle;
     }
 
-    public void dodiagnose(String clusterid, String appid) throws Exception {
+    public void dodiagnose(String appid) throws Exception {
         //判断是否已诊断过，返回or诊断
         DBInstance db = new DBInstance("diagnose");
-        if (db.getDiagnoseResData(clusterid,appid).size()>0){
+        if (db.getDiagnoseResData(appid).size()>0){
             db.close();
             return;
         }
@@ -66,11 +67,19 @@ public class SingletonHandle {
         ModelData model = modeldb.getModel(config.getTaskTag(), "kmeans");
         String[] badlist = model.getAnomalylabels();
         HashSet<String> badset = new HashSet<String>(new ArrayList<String>(Arrays.asList(badlist)));
+        //zeus mode
+        badset.clear();
+        badset.add("1");
+        badset.add("2");
+        badset.add("3");
+        badset.add("4");
+        //end zeus
         modeldb.close();
 
         DBInstance taskdb = new DBInstance("taskfea");
         ArrayList<TreeData> datalist = taskdb.getOneTaskFeaData4Tree(appid);
         HashMap<String,DiagnoseResData> diagmap = new HashMap<String, DiagnoseResData>();
+        HashMap<Integer,String> taskZeusMap = Zeus.getTaskMap();
         for (TreeData treeData:datalist){
             TaskIdFeaData taskIdFeaData = (TaskIdFeaData)treeData.getFeadata();
             String stageid = taskIdFeaData.getStageid();
@@ -80,12 +89,12 @@ public class SingletonHandle {
             if (diagmap.containsKey(stageid)){
                 tmp = diagmap.get(stageid);
             }else {
-                tmp = new DiagnoseResData(clusterid, appid, stageid, locate);
+                tmp = new DiagnoseResData("test", appid, stageid, locate);
             }
             if (badset.contains(label))
-                tmp.updateTaskBadmap(taskIdFeaData.getTaskid(),label+":anomaly");
+                tmp.updateTaskBadmap(taskIdFeaData.getTaskid(),taskZeusMap.get(Integer.valueOf(label)));
             else
-                tmp.updateTaskGoodmap(taskIdFeaData.getTaskid(), label + ":ok");
+                tmp.updateTaskGoodmap(taskIdFeaData.getTaskid(), taskZeusMap.get(Integer.valueOf(label)));
             diagmap.put(stageid,tmp);
         }
 //        for(String stageid:diagmap.keySet()){
@@ -99,10 +108,19 @@ public class SingletonHandle {
         ModelData model2 = modeldb2.getModel(config.getBlockTag(), "kmeans");
         String[] badlist2 = model2.getAnomalylabels();
         HashSet<String> badset2 = new HashSet<String>(new ArrayList<String>(Arrays.asList(badlist2)));
+        //zeus mode
+        badset2.clear();
+        badset2.add("1");
+        badset2.add("2");
+        badset2.add("3");
+        badset2.add("4");
+        //end zeus
         modeldb.close();
 
         DBInstance blockdb = new DBInstance("blockfea");
         ArrayList<TreeData> datalist2 = blockdb.getOneBlockFeaData4Tree(appid);
+        HashMap<Integer,String> blockZeusMap = Zeus.getBlockMap();
+
         for (TreeData treeData:datalist2){
             BlockIdFeaData blockIdFeaData = (BlockIdFeaData)treeData.getFeadata();
             HashSet<String> stageset = blockIdFeaData.getStageid();
@@ -115,12 +133,12 @@ public class SingletonHandle {
                 if (diagmap.containsKey(stageid)){
                     tmp = diagmap.get(stageid);
                 }else {
-                    tmp = new DiagnoseResData(clusterid, appid, stageid, locate);
+                    tmp = new DiagnoseResData("test", appid, stageid, locate);
                 }
                 if (badset2.contains(label))
-                    tmp.updateBlockBadmap(blockIdFeaData.getBlockid(), label + ":anomaly");
+                    tmp.updateBlockBadmap(blockIdFeaData.getBlockid(), blockZeusMap.get(Integer.valueOf(label)));
                 else
-                    tmp.updateBlockGoodmap(blockIdFeaData.getBlockid(), label + ":ok");
+                    tmp.updateBlockGoodmap(blockIdFeaData.getBlockid(), blockZeusMap.get(Integer.valueOf(label)));
                 diagmap.put(stageid,tmp);
             }
         }

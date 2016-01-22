@@ -49,8 +49,13 @@ public class Kmeans {
         //更新类别
         int[] assignments = kmeans.getAssignments();
         ArrayList<Integer> labellist = new ArrayList<Integer>();
-        for(int e:assignments){
-            labellist.add(e);
+//        for(int e:assignments){
+//            labellist.add(e);
+//        }
+        for (Instance instance : data) {
+            int zeus = Zeus.tag_kmeans_task(instance);
+            int cluster = zeus;
+            labellist.add(cluster);
         }
         DBInstance db = new DBInstance(config.getTaskTag());
         ArrayList<TaskIdFeaData> datalist = db.getAllTaskFeaData();
@@ -79,8 +84,9 @@ public class Kmeans {
         ArrayList<Integer> labellist = new ArrayList<Integer>();
 		for (Instance instance : testdata) {
             int zeus = Zeus.tag_kmeans_task(instance);
-			int cluster = zeus==-1?model.clusterInstance(instance):zeus;
-			labellist.add(cluster);
+//			int cluster = zeus==-1?model.clusterInstance(instance):zeus;
+            int cluster = zeus;
+            labellist.add(cluster);
 		}
         db.updateTaskFeaData(datalist,null,labellist);
         db.close();
@@ -117,8 +123,13 @@ public class Kmeans {
         //更新类别
         int[] assignments = kmeans.getAssignments();
         ArrayList<Integer> labellist = new ArrayList<Integer>();
-        for(int e:assignments){
-            labellist.add(e);
+//        for(int e:assignments){
+//            labellist.add(e);
+//        }
+        for (Instance instance : data) {
+            int zeus = Zeus.tag_kmeans_block(instance);
+            int cluster = zeus;
+            labellist.add(cluster);
         }
         DBInstance db = new DBInstance("blockfea");
         ArrayList<BlockIdFeaData> datalist = db.getAllBlockFeaData();
@@ -147,7 +158,8 @@ public class Kmeans {
         ArrayList<Integer> labellist = new ArrayList<Integer>();
         for (Instance instance : testdata) {
             int zeus = Zeus.tag_kmeans_block(instance);
-            int cluster = zeus==-1?model.clusterInstance(instance):zeus;
+//            int cluster = zeus==-1?model.clusterInstance(instance):zeus;
+            int cluster = zeus;
             labellist.add(cluster);
         }
         db.updateBlockFeaData(datalist,null,labellist);

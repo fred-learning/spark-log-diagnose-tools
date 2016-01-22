@@ -20,12 +20,12 @@ public class TaskFeaDiag {
             config = Config.getInstance();
         }
 
-//        System.out.println("extract fea!!");
-//        new ExtractTaskFea().DoExtract(config.getTrainLogPath(),true);
-//
-//        System.out.println("train!!");
-//        new Kmeans().trainTaskFea(Integer.valueOf(config.getKmeansTask()));
-        new Kmeans().testTaskFea("x_kmeans_to_cache_noenough_memory.log");
+        System.out.println("extract fea!!");
+        new ExtractTaskFea().DoExtract(config.getTrainLogPath(),true);
+
+        System.out.println("train!!");
+        new Kmeans().trainTaskFea(Integer.valueOf(config.getKmeansTask()));
+//        new Kmeans().testTaskFea("x_kmeans_to_cache_noenough_memory.log");
 //        new PCA().trainTaskFea();
 //        new PCA().testTaskFea("x_kmeans_to_cache_noenough_memory.log");
     }

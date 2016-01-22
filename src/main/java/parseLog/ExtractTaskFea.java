@@ -123,8 +123,8 @@ public class ExtractTaskFea {
     //提取每个文件的特征
     private void matchEachFile(String filepath) {
         try {
-//            String[] patharr = filepath.split("\\\\");
-            String[] patharr = filepath.split("/");
+            String[] patharr = filepath.split("\\\\");
+//            String[] patharr = filepath.split("/");
             String appid = patharr[patharr.length-1];
             //如果已经保存了，跳过
             DBInstance blockdb = new DBInstance("taskfea");

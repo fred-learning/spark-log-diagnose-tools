@@ -18,11 +18,10 @@ public class DiagnoseServlet  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String clusterid = req.getParameter("clusterid");
         String appid = req.getParameter("appid");
-        if (clusterid !=null&&appid != null) {
+        if (appid != null) {
             try {
-                hand.dodiagnose(clusterid,appid);
+                hand.dodiagnose(appid);
             } catch (Exception e) {
                 e.printStackTrace();
             }

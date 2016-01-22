@@ -288,7 +288,7 @@ public class DBInstance {
                 .append("fulldata", gson.toJson(diagnoseResData));
         getMongoCollection().insertOne(doc);
     }
-    public ArrayList<DiagnoseResData> getDiagnoseResData(String clusterid, String appid) {
+    public ArrayList<DiagnoseResData> getDiagnoseResData(String appid) {
         FindIterable<Document> docs = mongoCollection.find(new Document("appid", appid));
         ArrayList<DiagnoseResData> reslist = new ArrayList<DiagnoseResData>();
         for(Document doc:docs){
